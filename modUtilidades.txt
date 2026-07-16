@@ -2,23 +2,27 @@ Option Explicit
 
 Function BuscarColumna(ws As Worksheet, Texto As String) As Long
 
-    Dim c As Range
+    Dim filaEncabezado As Long
+    Dim ultimaCol As Long
+    Dim c As Long
 
-    For Each c In ws.Rows(1).Cells
+    filaEncabezado = BuscarFilaEncabezado(ws)
 
-        If Trim(c.Value) = "" Then Exit For
+    ultimaCol = ws.Cells(filaEncabezado, ws.Columns.Count).End(xlToLeft).Column
 
-        If InStr(1, UCase(c.Value), UCase(Texto)) > 0 Then
+    For c = 1 To ultimaCol
 
-            BuscarColumna = c.Column
+        If InStr(1, UCase(Trim(ws.Cells(filaEncabezado, c).Value)), _
+                 UCase(Texto)) > 0 Then
 
+            BuscarColumna = c
             Exit Function
 
         End If
 
-    Next
+    Next c
 
-    MsgBox "No se encontró la columna " & Texto
+    MsgBox "No se encontró la columna '" & Texto & "'"
 
     End
 
