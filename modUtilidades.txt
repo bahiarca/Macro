@@ -23,3 +23,33 @@ Function BuscarColumna(ws As Worksheet, Texto As String) As Long
     End
 
 End Function
+
+Function NormalizarDesignators(txt As String) As String
+
+    Dim v() As String
+    Dim i As Long, j As Long
+    Dim aux As String
+
+    txt = Replace(txt, " ", "")    'Eliminar espacios
+
+    If Len(txt) = 0 Then
+        NormalizarDesignators = ""
+        Exit Function
+    End If
+
+    v = Split(txt, ",")
+
+    'Ordenamiento alfabético (Bubble Sort)
+    For i = LBound(v) To UBound(v) - 1
+        For j = i + 1 To UBound(v)
+            If UCase(v(i)) > UCase(v(j)) Then
+                aux = v(i)
+                v(i) = v(j)
+                v(j) = aux
+            End If
+        Next j
+    Next i
+
+    NormalizarDesignators = Join(v, ",")
+
+End Function
