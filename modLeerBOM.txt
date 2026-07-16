@@ -1,0 +1,54 @@
+Option Explicit
+
+Function LeerBOM(Ruta As String) As Object
+
+    Dim wb As Workbook
+    Dim ws As Worksheet
+
+    Dim Dic As Object
+
+    Set Dic = CreateObject("Scripting.Dictionary")
+
+    Set wb = Workbooks.Open(Ruta, ReadOnly:=True)
+
+    Set ws = wb.Worksheets(1)
+
+    Dim colSAP As Long
+    Dim colQty As Long
+    Dim colDes As Long
+
+    colSAP = BuscarColumna(ws, "SAP")
+    colQty = BuscarColumna(ws, "Quant")
+    colDes = BuscarColumna(ws, "Designator")
+
+    Dim UltFila As Long
+
+    UltFila = ws.Cells(ws.Rows.Count, colSAP).End(xlUp).Row
+
+    Dim i As Long
+
+    For i = 2 To UltFila
+
+        If Trim(ws.Cells(i, colSAP).Value) <> "" Then
+
+            Dim c As clsComponente
+
+            Set c = New clsComponente
+
+            c.SAP = Trim(ws.Cells(i, colSAP).Value)
+
+            c.Quantity = Val(ws.Cells(i, colQty).Value)
+
+            c.Designator = Trim(ws.Cells(i, colDes).Value)
+
+            Dic.Add c.SAP, c
+
+        End If
+
+    Next i
+
+    wb.Close False
+
+    Set LeerBOM = Dic
+
+End Function
