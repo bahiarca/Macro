@@ -1,0 +1,28 @@
+Option Explicit
+
+Public BOM_A As Object
+Public BOM_B As Object
+
+Sub CompararBOM()
+
+    Dim ArchivoA As Variant
+    Dim ArchivoB As Variant
+
+    ArchivoA = Application.GetOpenFilename( _
+                "Excel (*.xls*),*.xls*", , _
+                "Seleccione BOM A")
+
+    If ArchivoA = False Then Exit Sub
+
+    ArchivoB = Application.GetOpenFilename( _
+                "Excel (*.xls*),*.xls*", , _
+                "Seleccione BOM B")
+
+    If ArchivoB = False Then Exit Sub
+
+    Set BOM_A = LeerBOM(CStr(ArchivoA))
+    Set BOM_B = LeerBOM(CStr(ArchivoB))
+
+    CompararDiccionarios BOM_A, BOM_B
+
+End Sub
