@@ -1,0 +1,25 @@
+Option Explicit
+
+Function BuscarColumna(ws As Worksheet, Texto As String) As Long
+
+    Dim c As Range
+
+    For Each c In ws.Rows(1).Cells
+
+        If Trim(c.Value) = "" Then Exit For
+
+        If InStr(1, UCase(c.Value), UCase(Texto)) > 0 Then
+
+            BuscarColumna = c.Column
+
+            Exit Function
+
+        End If
+
+    Next
+
+    MsgBox "No se encontró la columna " & Texto
+
+    End
+
+End Function
