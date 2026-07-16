@@ -1,0 +1,94 @@
+Option Explicit
+
+Sub CompararDiccionarios(A As Object, B As Object)
+
+    Dim ws As Worksheet
+
+    On Error Resume Next
+
+    Application.DisplayAlerts = False
+
+    Worksheets("Comparación").Delete
+
+    Application.DisplayAlerts = True
+
+    On Error GoTo 0
+
+    Set ws = Worksheets.Add
+
+    ws.Name = "Comparación"
+
+    ws.Range("A1:F1") = Array("SAP", _
+                              "Estado", _
+                              "Qty A", _
+                              "Qty B", _
+                              "Designator A", _
+                              "Designator B")
+
+    Dim fila As Long
+
+    fila = 2
+
+    Dim k As Variant
+
+    For Each k In A.Keys
+
+        ws.Cells(fila, 1) = k
+
+        If B.Exists(k) Then
+
+            ws.Cells(fila, 3) = A(k).Quantity
+
+            ws.Cells(fila, 4) = B(k).Quantity
+
+            ws.Cells(fila, 5) = A(k).Designator
+
+            ws.Cells(fila, 6) = B(k).Designator
+
+            If A(k).Quantity <> B(k).Quantity Then
+
+                ws.Cells(fila, 2) = "Cantidad distinta"
+
+            ElseIf A(k).Designator <> B(k).Designator Then
+
+                ws.Cells(fila, 2) = "Designator distinto"
+
+            Else
+
+                ws.Cells(fila, 2) = "OK"
+
+            End If
+
+        Else
+
+            ws.Cells(fila, 2) = "Solo en A"
+
+            ws.Cells(fila, 3) = A(k).Quantity
+
+            ws.Cells(fila, 5) = A(k).Designator
+
+        End If
+
+        fila = fila + 1
+
+    Next
+
+    For Each k In B.Keys
+
+        If Not A.Exists(k) Then
+
+            ws.Cells(fila, 1) = k
+
+            ws.Cells(fila, 2) = "Solo en B"
+
+            ws.Cells(fila, 4) = B(k).Quantity
+
+            ws.Cells(fila, 6) = B(k).Designator
+
+            fila = fila + 1
+
+        End If
+
+    Next
+
+End Sub
